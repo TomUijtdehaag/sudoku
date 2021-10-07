@@ -7,23 +7,47 @@ def solve(grid):
     if is_complete(grid):
         return grid
 
-    choice = get_options(grid)[0]
+    ranked_options, possible_list = rank_options(grid)
     new_grid = grid.copy()
 
-    for val in range(1, len(grid)+1):
-        new_grid[choice[0], choice[1]] = val
+    for position, possible in zip(ranked_options, possible_list):
+        for val in possible:
+            new_grid[position[0], position[1]] = val
 
-        if is_valid(new_grid):
-            new_grid = solve(new_grid)
-            
-            if is_complete(new_grid):
-                return new_grid
+            if is_valid(new_grid):
+                new_grid = solve(new_grid)
+                
+                if is_complete(new_grid):
+                    return new_grid
 
     return grid
 
 
 def get_options(grid):
     return np.argwhere(grid == 0)
+
+def rank_options(grid):
+    subsize = int(len(grid)**.5)
+    options = get_options(grid)
+    possible_list = []
+
+    for i, j in options:
+        possible = set(range(1,len(grid)+1))
+        banned = set(
+            grid[i].tolist() + 
+            grid[:,j].tolist() + 
+            grid[(i//subsize)*subsize:(i//subsize+1)*subsize,(j//subsize)*subsize:(j//subsize+1)*subsize].flatten().tolist()
+            )
+
+        possible -= banned
+        
+        possible_list.append(possible)
+
+    order = np.argsort([len(p) for p in possible_list])
+    ranked_options = options[order]
+    possible_list = np.array(possible_list)[order]
+
+    return ranked_options, possible_list
 
         
 def is_valid(grid):
