@@ -7,11 +7,11 @@ import time
 
 def solve_one(args):
     solve_fn, sudoku, key = args
-    print(f'Solving {key}')
+    print(f'Starting {key}...')
     single_start = time.time()
     solution = solve_fn(sudoku)
     single_duration = time.time() - single_start
-    print(f'Done in {round(single_duration, 4)}s.\nSolution:')
+    print(f'Solved {key} in {round(single_duration, 4)}s.\nSolution:')
     print(solution)
     print(f'Solution is valid: {is_valid(solution)}')
     print(f'Solution is complete: {is_complete(solution)}')
