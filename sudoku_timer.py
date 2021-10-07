@@ -7,7 +7,7 @@ import time
 
 def solve_one(args):
     solve_fn, sudoku, key = args
-    print(f'Starting {key}...')
+    print(f'Starting {key}...\n')
     single_start = time.time()
     solution = solve_fn(sudoku)
     single_duration = time.time() - single_start
