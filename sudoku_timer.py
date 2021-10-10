@@ -1,9 +1,12 @@
+import time
 from multiprocessing import Pool
 
-from sudoku import solve, is_valid, is_complete
+import matplotlib.pyplot as plt
+import numpy as np
+
+from sudoku import is_complete, is_valid, solve
 from utils import read_sudokus
 
-import time
 
 def solve_one(args):
     solve_fn, sudoku, key = args
@@ -28,6 +31,12 @@ def time_solver(solve_fn):
     total_duration = sum(times)
     print(f'Solved all sudokus in {round(total_duration, 4)}s.')
     print(f'Average solving time: {round(total_duration/len(sudokus), 4)}s.')
+
+    plt.hist(times, bins=50)
+    plt.show()
+
+    plt.hist(times, bins=np.linspace(0, 3, 50))
+    plt.show()
 
 
 def main():
