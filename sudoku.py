@@ -19,7 +19,6 @@ def solve(grid):
     for number in possible_numbers:
         new_grid[best_option[0], best_option[1]] = number
 
-        # if is_valid(new_grid):
         new_grid = solve(new_grid)
         
         if is_complete(new_grid):
