@@ -2,23 +2,28 @@ import numpy as np
 
 from utils import read_sudokus
 
+iterations = 0
 
 def solve(grid):
+    global iterations
+    iterations += 1
     if is_complete(grid):
         return grid
 
-    ranked_options, possible_list = rank_options(grid)
+    best_option, possible_numbers = rank_options(grid)
+    if len(possible_numbers) == 0:
+        return grid
+
     new_grid = grid.copy()
+  
+    for number in possible_numbers:
+        new_grid[best_option[0], best_option[1]] = number
 
-    for position, possible in zip(ranked_options, possible_list):
-        for val in possible:
-            new_grid[position[0], position[1]] = val
-
-            if is_valid(new_grid):
-                new_grid = solve(new_grid)
-                
-                if is_complete(new_grid):
-                    return new_grid
+        if is_valid(new_grid):
+            new_grid = solve(new_grid)
+            
+            if is_complete(new_grid):
+                return new_grid
 
     return grid
 
@@ -43,11 +48,18 @@ def rank_options(grid):
         
         possible_list.append(possible)
 
-    order = np.argsort([len(p) for p in possible_list])
-    ranked_options = options[order]
-    possible_list = np.array(possible_list)[order]
+    non_empty = np.argwhere(np.array([len(p) for p in possible_list]) > 0).flatten()
+    possible_list = np.array(possible_list)[non_empty]
+    options = options[non_empty]
 
-    return ranked_options, possible_list
+    if len(options) == 0:
+        return None, set()
+
+    best = np.argmin([len(p) for p in possible_list])
+    best_option = options[best]
+    possible_numbers = possible_list[best]
+
+    return best_option, possible_numbers
 
         
 def is_valid(grid):
@@ -87,7 +99,7 @@ def is_complete(grid):
 
 def main():
     sudokus = read_sudokus('puzzles.txt')
-    key = 'Grid 01'
+    key = 'Grid 26'
     sudoku = sudokus[key]
     print('Solving', key)
     solution = solve(sudoku)
