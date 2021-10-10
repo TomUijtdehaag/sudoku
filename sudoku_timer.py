@@ -35,7 +35,7 @@ def time_solver(solve_fn):
     plt.hist(times, bins=50)
     plt.show()
 
-    plt.hist(times, bins=np.linspace(0, 3, 50))
+    plt.hist(times, bins=np.linspace(0, 1, 50))
     plt.show()
 
 
