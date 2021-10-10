@@ -1,3 +1,4 @@
+import os
 import time
 from multiprocessing import Pool
 
@@ -25,7 +26,7 @@ def time_solver(solve_fn):
     sudokus = read_sudokus('puzzles.txt')
     sudokus = [(solve_fn, sudoku, key) for key, sudoku in sudokus.items()]
 
-    with Pool(16) as p:
+    with Pool(os.cpu_count()) as p:
         times = p.map(solve_one, sudokus)       
 
     total_duration = sum(times)
