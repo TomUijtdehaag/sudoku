@@ -2,11 +2,8 @@ import numpy as np
 
 from utils import read_sudokus
 
-iterations = 0
 
 def solve(grid):
-    global iterations
-    iterations += 1
     if is_complete(grid):
         return grid
 
