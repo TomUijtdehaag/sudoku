@@ -44,14 +44,9 @@ def rank_options(grid):
         
         possible_list.append(possible)
 
-    non_empty = np.argwhere(np.array([len(p) for p in possible_list]) > 0).flatten()
-    possible_list = np.array(possible_list)[non_empty]
-    options = options[non_empty]
-
-    if len(options) == 0:
-        return None, set()
-
     best = np.argmin([len(p) for p in possible_list])
+    if len(possible_list[best]) == 0: return None, set()
+
     best_option = options[best]
     possible_numbers = possible_list[best]
 
